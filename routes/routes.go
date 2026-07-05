@@ -19,21 +19,37 @@ import (
 
 // Register wires all HTTP routes to their handlers.
 func Register(router *gin.Engine) {
+	// you register the handlers here
+	// but never call them right away like its not handler.Retrieve() here
+	// When user hits GET /retrieve  →  Gin calls handler.Retrieve(c)
+	// You register handlers at startup; Gin invokes them per request.
 
 	// when someone hits /retrieve, execute the handler function
-	router.GET("/retrieve", handler.Retrieve)
+	// Delete() sets deleted_at, doesn't hard-delete
+	// Find() auto-excludes soft-deleted rows
+	router.GET("/users", handler.Retrieve)
+
+	//https://gin-gonic.com/en/docs/routing/param-in-path/
+	router.GET("/users/:id", handler.RetrieveOne)
 
 	// create a new resource
-	router.POST("/create", handler.Create)
+	router.POST("/users", handler.Create)
 
-	// update the entire resource
-	router.PUT("/update", handler.Update)
+	// update the entire resource by id
+	router.PUT("/users/:id", handler.Update)
 
-	// delete the entire resource
-	router.DELETE("/delete", handler.Delete)
+	// update a particular field(age) of a resource by id
+	router.PATCH("/users/:id", handler.Patch)
 
-	// update a particular field of a resource
-	router.PATCH("/patch", handler.Patch)
+	// delete the entire resource by id
+	router.DELETE("/users/:id", handler.Delete)
+
+	// we dont do handler.Patch() here because we want to call it when PATCH /patch arrives
+	// handler.Patch    // "call this when PATCH /patch arrives"
+	// handler.Patch(c *gin.Context)  // "call this RIGHT NOW"
+
+	//router.GET(path string, handler func(c *gin.Context))
+	// It wants a function reference — something to call later when a request hits /retrieve.
 
 	// HEAD is similar to GET, but without the response body.
 	// It's useful for checking if a resource exists without downloading the content.
@@ -43,5 +59,14 @@ func Register(router *gin.Engine) {
 	// Purpose is to read metadata like size, last modified date, etc. without downloading the content.
 	// Health checks on large objects without downloading the content.
 	// "Does this file exist? How big is it?"
-	router.HEAD("/head", handler.Head)
+	router.HEAD("/users/:id", handler.Head)
+
+	// https://gin-gonic.com/en/docs/routing/querystring-param/
+	// GET /users/search?name=John&min_age=25 -> result has name John and age >= 25
+	// GET /users/search?name=John -> result has name John
+	// GET /users/search?min_age=25 -> result has age >= 25
+	router.GET("/users/search", handler.FindUsersByNameAndAge)
+
+	// GET /users/search?name=John&min_age=25
+	router.GET("/users/search2", handler.FindUsersByMandatoryNameAndAge)
 }
