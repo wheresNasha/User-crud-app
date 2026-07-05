@@ -203,6 +203,7 @@ CompileDaemon terminal log showing AutoMigrate in action:
 
 ![ALTER TABLE age in SQL editor](docs/images/alter-table-age.png)
 
+![After Automigrate](docs/images/After-automigrate-age-column-default0.png)
 ### Unique email constraint
 
 Add tag in `models/user.go`:
