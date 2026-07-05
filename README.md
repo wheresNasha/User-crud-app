@@ -216,10 +216,7 @@ Restart app → GORM adds unique index on `email`.
 
 ![Unique constraint on email](docs/images/unique-email-constraint.png)
 
-Duplicate email returns error:
-
-![Duplicate email error](docs/images/duplicate-email-error.png)
-
+Duplicate email returns error!!
 ---
 
 ## How Gin handlers work (interview summary)
