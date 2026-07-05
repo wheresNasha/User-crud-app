@@ -184,6 +184,10 @@ When you add a field to `models/user.go` (e.g. `Age`), **restart the app** — `
 | Create tables | Change column types safely |
 | Add indexes | Drop tables |
 
+DB before adding age column
+
+![AutoMigrate in Neon schema view](docs/images/automigrate-age-column.png)
+
 GORM runs SQL like:
 
 ```sql
@@ -192,11 +196,10 @@ ALTER TABLE users ADD COLUMN age bigint DEFAULT 0;
 
 Existing rows get default values (`age = 0` for `int`).
 
+
 CompileDaemon terminal log showing AutoMigrate in action:
 
 ![GORM AutoMigrate — ALTER TABLE adds age column](docs/images/age-column-added.png)
-
-![AutoMigrate in Neon schema view](docs/images/automigrate-age-column.png)
 
 ![ALTER TABLE age in SQL editor](docs/images/alter-table-age.png)
 
